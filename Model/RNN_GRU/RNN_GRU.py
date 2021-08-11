@@ -48,7 +48,7 @@ data_com_X_1 = df[df.label == 1]
 data_com_X_0 = df[df.label == 0]
 
 # Generate training data
-# ********* delete those with null data **********
+# delete those with null data
 sentences = []
 preprocess_text(data_com_X_1.values.tolist(), sentences, 'like')
 n = 0
