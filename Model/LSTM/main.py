@@ -85,7 +85,7 @@ def getWords(file):
     return lineList
 
 def makeData(posPath,negPath):
-    # Get vocabulary, return type [[word1,word2...] ,[word1,word2...] ,...]
+    # Get vocabulary, return type [[] ,[] ,]
     pos = getWords(posPath)
     print("The positive data's length is :",len(pos))
     neg = getWords(negPath)
