@@ -85,7 +85,7 @@ def get_steam_review(url):
                 height = new_height
                 # Resetting the initial timestamp
                 t1 = int(time.time())
-            elif num < 5:
+            elif num < 20 : # When the page height has not been updated for more than 20 seconds, the retry logic enters, retrying 3 times, waiting 20 seconds each time
                 sleep(3)
                 num = num + 1
             else: # Timeout and retry count exceeded, the program ends the loop and the page is considered loaded
@@ -93,6 +93,7 @@ def get_steam_review(url):
                 status = False
                 # Scroll bar adjusted to top of page
                 driver.execute_script('window.scrollTo(0, 0)')
+                # sleep(50)
 
     r1 = driver.page_source
     xml = etree.HTML(r1)

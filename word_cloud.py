@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pylab
 import matplotlib
 matplotlib.rcParams['figure.figsize'] = (10.0, 5.0)
-from wordcloud import WordCloud  # 词云包
+from wordcloud import WordCloud
 
 # Length of document
 def xlsx_long():
@@ -49,9 +49,8 @@ words_stat = words_df.groupby(by=['segment'])['segment'].agg([("count", "count")
 words_stat = words_stat.reset_index().sort_values(by=["count"], ascending=False)
 
 # words clouds
-wordcloud = WordCloud(font_path="./simhei.ttf"
-                      ,background_color="white"
-                      ,max_font_size=80)
+wordcloud = WordCloud(font_path="./simhei.ttf",background_color="white",max_font_size=80)
+
 word_frequence = {x[0]: x[1] for x in words_stat.head(100).values}
 wordcloud = wordcloud.fit_words(word_frequence)
 plt.imshow(wordcloud)
