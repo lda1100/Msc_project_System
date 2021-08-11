@@ -70,7 +70,6 @@ def convert2Data(posArray, negArray, posStep, negStep):
 # Get the information in the txt file and that's per line
 def getWords(file):
     wordList = []
-    trans = []
     lineList = []
     with open(file,'r',encoding='utf-8') as f:
         lines = f.readlines()
@@ -100,11 +99,6 @@ def makeData(posPath,negPath):
     return Data, Steps, Labels
 
 
-#----------------------------------------------
-# Word60.model   60
-# word2vec.model        200
-
-timeA=time.time()
 # print()
 word2vec_path = 'word2vec/200/word2vec.model'
 model = gensim.models.Word2Vec.load(word2vec_path)
@@ -115,22 +109,14 @@ MAX_SIZE=30
 stopWord = makeStopWord()
 
 print("In train data:")
-trainData, trainSteps, trainLabels = makeData('data/B/Pos-train.txt',
-                                              'data/B/Neg-train.txt')
+trainData, trainSteps, trainLabels = makeData('data/A/Pos-train.txt',
+                                              'data/A/Neg-train.txt')
 print("In test data:")
-testData, testSteps, testLabels = makeData('data/B/Pos-price_information.txt',
-                                           'data/B/Neg-price_information.txt')
+testData, testSteps, testLabels = makeData('data/A/Pos-price_information.txt',
+                                           'data/A/Neg-price_information.txt')
 trainLabels = np.array(trainLabels)
 
 del model
-
-print("-"*30)
-print("The trainData's shape is:",trainData.shape)
-print("The testData's shape is:",testData.shape)
-print("The trainSteps's shape is:",trainSteps.shape)
-print("The testSteps's shape is:",testSteps.shape)
-print("The trainLabels's shape is:",trainLabels.shape)
-print("The testLabels's shape is:",np.array(testLabels).shape)
 
 
 num_nodes = 256
@@ -184,16 +170,16 @@ with graph.as_default():
         # Directly done with softmax and calculating cross entropy
         tf.nn.softmax_cross_entropy_with_logits(labels=tf_train_labels,
                                                 logits=train_logits))
-    # Optimizer, optimization objective is loss, learning rate is 0.1
-    optimizer = tf.train.GradientDescentOptimizer(0.01).minimize(loss)
+    # Optimizer, optimization objective is loss, learning rate is 0.2
+    optimizer = tf.train.GradientDescentOptimizer(0.02).minimize(loss)
 
     # Predictions on the test set
     test_prediction = tf.nn.softmax(model(tf_test_dataset, tf_test_steps))
 
 # The calculation diagram is basically built, the next step is the process of calling
-num_steps = 20001
+num_steps = 15000
 # num_steps = 1000
-summary_frequency = 500
+summary_frequency = 100
 
 
 with tf.Session(graph = graph) as session:
@@ -224,7 +210,5 @@ with tf.Session(graph = graph) as session:
     with open('../../price_information.txt', 'a', encoding='utf-8') as f :
         text = a + '\n'
         f.write(text)
-#####################################
-timeB=time.time()
-print("time cost:",int(timeB-timeA))
+
 
